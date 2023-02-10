@@ -2,6 +2,11 @@ package com.challangeEvent.ORM.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @Entity
 @Table(name = "tb_activity")
 public class Activity {
@@ -13,6 +18,19 @@ public class Activity {
     @Column(columnDefinition = "TEXT")
     private String description;
     private Double Price;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    @OneToMany(mappedBy = "activity")
+    private List<Block> blocks = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "tb_activity_participant",
+            joinColumns = @JoinColumn(name = "activity_id"),
+            inverseJoinColumns = @JoinColumn(name = "participant_id"))
+    private Set<Participant> participants = new HashSet<>();
 
     public Activity() {
     }
@@ -55,4 +73,10 @@ public class Activity {
     public void setPrice(Double price) {
         Price = price;
     }
+
+    public List<Block> getBlocks() {
+        return blocks;
+    }
+
+
 }
